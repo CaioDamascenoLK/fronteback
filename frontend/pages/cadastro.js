@@ -21,7 +21,7 @@ async function sendUser() {
         headers: {
             "Content-Type": "application/json"
         },
-        body: JSON.stringify({ user }) // ← mantém o formato { user: { name, email, password } }
+        body: JSON.stringify({ user }) 
     })
 
     const data = await response.json()

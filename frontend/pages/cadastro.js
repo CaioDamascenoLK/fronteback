@@ -26,4 +26,6 @@ async function sendUser() {
 
     const data = await response.json()
     alert(data.mensage)
+
+    window.location.href = "../index.html"
 }

@@ -2,21 +2,19 @@ const button = document.querySelector("button")
 
 button.onclick = (event) => {
     event.preventDefault()
-    sendUser()
+    login()
 }
 
-async function sendUser() {
-    const name = document.querySelector("#nome").value
+async function login() {
     const email = document.querySelector("#email").value
     const password = document.querySelector("#senha").value
 
     const user = {
-        name,
         email,
         password
     }
 
-    const response = await fetch("https://backend-marcielo-hr21.vercel.app/cadastrar", {
+    const response = await fetch("https://backend-marcielo-hr21.vercel.app/login", {
         method: "POST",
         headers: {
             "Content-Type": "application/json"
@@ -24,8 +22,17 @@ async function sendUser() {
         body: JSON.stringify({ user }) 
     })
 
+    if(response.menssage){
+        alert(response.mensage)
+        return
+    }
+
+    const {id, name} = response
+
+    sessionStorage.setItem("user", JSON.stringify({id, name}))
+
     const data = await response.json()
-    alert(data.mensage)
+    alert("login realizado com sucesso")
 
     window.location.href = "../index.html"
 }

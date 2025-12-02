@@ -1,4 +1,4 @@
-import express from "express"
+import express, { response } from "express"
 import cors from "cors"
 import mysql2 from "mysql2"
 
@@ -20,6 +20,24 @@ app.get("/", (request, response) => {
         }
 
         response.json(results)
+    })
+})
+
+app.post("/login", (request, response)=>{
+    const {email, password} = request.body.user
+
+
+    const selectCommand = "SELECT * FROM caiodamasceno_02mb WHERE email = ?"
+    database.query(selectCommand, [email], (error, user) => {
+        if(error){
+            console.log(error)
+            return
+        }
+        if(user.length === 0 || user[0].password !== password){
+            response.json({menssage:"Usuario ou senha incorretos"})
+            return
+        }
+        response.json({id: user[0].id, name: user[0].name})
     })
 })
 

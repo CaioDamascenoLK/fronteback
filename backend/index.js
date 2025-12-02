@@ -2,7 +2,6 @@ import express from "express"
 import cors from "cors"
 import mysql2 from "mysql2"
 
-
 const {DB_HOST, DB_NAME, DB_USER, DB_PASSWORD} = process.env
 
 const app = express()
@@ -11,21 +10,21 @@ const port = 3333
 app.use(cors())
 app.use(express.json())
 
-app.get("/", (request,response) => {
+app.get("/", (request, response) => {
     const selectCommand = "SELECT name, email FROM caiodamasceno_02mbti"
+
     database.query(selectCommand, (error, results) => {
-        if(error){
+        if (error) {
             console.log(error)
-            return
+            return response.status(500).json({ error: "erro no banco" })
         }
-    console.log(users)
+
+        response.json(results)
     })
 })
 
 app.post("/cadastrar", (request, response) => {
     const { user } = request.body
-
-    console.log(user)
 
     const insertCommand = `
         INSERT INTO caiodamasceno_02mbti(name, email, password)
@@ -33,16 +32,16 @@ app.post("/cadastrar", (request, response) => {
     `
 
     database.query(insertCommand, [user.name, user.email, user.password], (error) => {
-        if(error){
+        if (error) {
             console.log(error)
-            return
+            return response.status(500).json({ error: "erro no cadastro" })
         }
-        response.status(201).json({mensage: "usuario cadastrado com sucesso"})
-    })
 
+        response.status(201).json({ mensage: "usuario cadastrado com sucesso" })
+    })
 })
 
-app.listen(port,()=>{
+app.listen(port, () => {
     console.log(`Server running on port ${port}`)
 })
 
